@@ -18,11 +18,22 @@ RSpec.describe "/residentials", type: :request do
   # Residential. As you add validations to Residential, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+      thumb_pic: "https://urhouse.s3.amazonaws.com/images/rentals/e608961813ac47bc0cfbcac85dd2147f.jpg?31363436353736353837",
+      title: "方正宅",
+      price_per_month: 30000,
+      address: "台北市松山區南京東路三段",
+      total_room: 1,
+      livingroom: 1,
+      has_mrt: true,
+      mrt_line: "台北小巨蛋",
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+      title: "",
+    }
   }
 
   describe "GET /index" do
@@ -79,7 +90,7 @@ RSpec.describe "/residentials", type: :request do
 
       it "renders a successful response (i.e. to display the 'new' template)" do
         post residentials_url, params: { residential: invalid_attributes }
-        expect(response).to be_successful
+        expect(response).to have_http_status(422)
       end
     end
   end
@@ -87,14 +98,17 @@ RSpec.describe "/residentials", type: :request do
   describe "PATCH /update" do
     context "with valid parameters" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        {
+          title: "變動宅",
+          has_mrt: false,
+        }
       }
 
       it "updates the requested residential" do
         residential = Residential.create! valid_attributes
         patch residential_url(residential), params: { residential: new_attributes }
         residential.reload
-        skip("Add assertions for updated state")
+        expect(response).to redirect_to(residential_url(residential))
       end
 
       it "redirects to the residential" do
@@ -109,7 +123,7 @@ RSpec.describe "/residentials", type: :request do
       it "renders a successful response (i.e. to display the 'edit' template)" do
         residential = Residential.create! valid_attributes
         patch residential_url(residential), params: { residential: invalid_attributes }
-        expect(response).to be_successful
+        expect(response).to have_http_status(422)
       end
     end
   end
