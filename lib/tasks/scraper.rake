@@ -28,7 +28,7 @@ namespace :scraper do
           a["rent"] <=> b["rent"]
         end
         items.sample(6).each do |item|
-          r = Residential.new
+          r = Residential.where(origin_id: item["id"]).first_or_initialize
           r[:thumb_pic] = item["image_url"]
           r[:title] = item["title"]
           r[:price_per_month] = item["rent"]
