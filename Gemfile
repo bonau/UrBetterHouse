@@ -58,3 +58,7 @@ gem "grape", "~> 1.6"
 gem "devise", "~> 4.8"
 gem "react-rails", "~> 2.6"
 gem "rspec-rails", "~> 5.1"
+
+# Prefered gems
+gem "oj", "~> 3.13"
+gem "progress_bar", "~> 1.3"
