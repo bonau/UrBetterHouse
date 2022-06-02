@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "residentials/edit", type: :view do
   before(:each) do
     @residential = assign(:residential, Residential.create!(
-      thumb_pic: "MyString",
+      thumb_pic: "https://urhouse.s3.amazonaws.com/images/rentals/e608961813ac47bc0cfbcac85dd2147f.jpg?31363436353736353837",
       title: "MyString",
       price_per_month: 1,
       address: "MyString",
