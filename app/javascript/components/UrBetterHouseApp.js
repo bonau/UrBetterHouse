@@ -1,14 +1,11 @@
-import React from "react"
-import PropTypes from "prop-types"
-import { Button } from "@mui/material";
-class UrBetterHouseApp extends React.Component {
-  render () {
-    return (
-      <React.Fragment>
-        <Button variant="contained">Hello, Bear!</Button>
-      </React.Fragment>
-    );
-  }
+import * as React from 'react';
+import MainAppBar from './MainAppBar'
+import MainContent from './MainContent';
+export default function UrBetterHouseApp () {
+  return (
+    <>
+      <MainAppBar />
+      <MainContent />
+    </>
+  )
 }
-
-export default UrBetterHouseApp
