@@ -24,5 +24,21 @@ module UrBetterHouse
                 present :datas, rs, with: UrBetterHouse::Entities::Residential
             end
         end
+
+        namespace :users do
+            params do
+                requires :email
+                requires :password
+            end
+
+            post '/sign_in' do
+                user = User.where(email: params[:email]).first
+                if user && user.valid_password?(params[:password])
+                    present({status: 200})
+                else
+                    present({status: 500})
+                end
+            end
+        end
     end
 end
