@@ -1,10 +1,12 @@
 import { Box, Container, Pagination, styled } from "@mui/material";
 import React from "react";
+import ResidentialShowcase from "./ResidentialShowcase";
 
-export default function MainContent() {
+export default function MainContent(props) {
   const StyledBox = styled(Box)(({ theme }) => ({
     padding: theme.spacing(2, 2),
-    display: "flex"
+    display: "flex",
+    flexDirection: "column"
   }));
 
   const StyledPagination = styled(Pagination)(({ theme }) => ({
@@ -19,6 +21,27 @@ export default function MainContent() {
 
   return (
     <StyledBox>
+      <Container
+        sx={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          gap: "1em",
+          flexWrap: "wrap",
+          "> *": {
+            flex: {
+              xs: "1 1 auto",
+              md: "1 1 30%"
+            }
+          }
+        }}
+      >
+        <ResidentialShowcase />
+        <ResidentialShowcase />
+        <ResidentialShowcase />
+        <ResidentialShowcase />
+        <ResidentialShowcase />
+        <ResidentialShowcase />
+      </Container>
       <Container>
         <StyledPagination
           count={10}
