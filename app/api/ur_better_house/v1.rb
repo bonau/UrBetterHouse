@@ -1,6 +1,7 @@
 module UrBetterHouse
     module Entities
         class Residential < Grape::Entity
+            expose :thumb_pic
             expose :title
             expose :address
             expose :price_per_month

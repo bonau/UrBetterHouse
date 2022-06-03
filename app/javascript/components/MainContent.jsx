@@ -1,8 +1,10 @@
 import { Box, Container, Pagination, styled } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import ResidentialShowcase from "./ResidentialShowcase";
 
 export default function MainContent(props) {
+  const [datas, setDatas] = useState([]);
+
   const StyledBox = styled(Box)(({ theme }) => ({
     padding: theme.spacing(2, 2),
     display: "flex",
@@ -18,6 +20,16 @@ export default function MainContent(props) {
   const paginationCallback = (_, p) => {
     console.log(p);
   };
+
+  React.useEffect(() => {
+    if (datas.length == 0) {
+      fetch('/api/v1/residentials').then((res) => {
+        res.json().then((data) => {
+          setDatas(data);
+        });
+      })
+    }
+  });
 
   return (
     <StyledBox>
@@ -35,12 +47,11 @@ export default function MainContent(props) {
           }
         }}
       >
-        <ResidentialShowcase />
-        <ResidentialShowcase />
-        <ResidentialShowcase />
-        <ResidentialShowcase />
-        <ResidentialShowcase />
-        <ResidentialShowcase />
+        {
+          datas.map((e) =>
+            <ResidentialShowcase data={e} />
+          )
+        }
       </Container>
       <Container>
         <StyledPagination
