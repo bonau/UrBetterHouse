@@ -62,3 +62,5 @@ gem "rspec-rails", "~> 5.1"
 # Prefered gems
 gem "oj", "~> 3.13"
 gem "progress_bar", "~> 1.3"
+gem "kaminari", "~> 1.2" # paging
+gem "grape-entity", "~> 0.10.1"
