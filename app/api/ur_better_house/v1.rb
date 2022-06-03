@@ -19,7 +19,9 @@ module UrBetterHouse
             get '/' do
                 page = (params[:page] || 1).to_i
                 rs = Residential.page(page).per(6) # TODO configure residentials per page
-                present rs, with: UrBetterHouse::Entities::Residential
+                present :total_page, rs.total_pages
+                present :per_page, 6
+                present :datas, rs, with: UrBetterHouse::Entities::Residential
             end
         end
     end

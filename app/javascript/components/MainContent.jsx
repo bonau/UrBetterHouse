@@ -4,6 +4,8 @@ import ResidentialShowcase from "./ResidentialShowcase";
 
 export default function MainContent(props) {
   const [datas, setDatas] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(10);
 
   const StyledBox = styled(Box)(({ theme }) => ({
     padding: theme.spacing(2, 2),
@@ -17,17 +19,23 @@ export default function MainContent(props) {
     alignItems: "center"
   }));
 
+  const fetchPage = (p) => {
+    fetch('/api/v1/residentials?page=' + parseInt(p)).then((res) => {
+      res.json().then((data) => {
+        setDatas(data.datas);
+        setPage(p);
+        setTotalPage(data.total_page);
+      });
+    })
+  }
+
   const paginationCallback = (_, p) => {
-    console.log(p);
+    fetchPage(p);
   };
 
   React.useEffect(() => {
     if (datas.length == 0) {
-      fetch('/api/v1/residentials').then((res) => {
-        res.json().then((data) => {
-          setDatas(data);
-        });
-      })
+      fetchPage(1);
     }
   });
 
@@ -55,7 +63,8 @@ export default function MainContent(props) {
       </Container>
       <Container>
         <StyledPagination
-          count={10}
+          count={totalPage}
+          page={page}
           size="large"
           onChange={paginationCallback}
         ></StyledPagination>
