@@ -15,6 +15,8 @@ module UrBetterHouse
         resource :residentials do
             params do
                 optional :page
+                optional :id
+                optional Devise::TokenAuthenticatable.token_authentication_key
             end
             get '/' do
                 page = (params[:page] || 1).to_i
@@ -22,6 +24,22 @@ module UrBetterHouse
                 present :total_page, rs.total_pages
                 present :per_page, 6
                 present :datas, rs, with: UrBetterHouse::Entities::Residential
+            end
+            get '/:id' do
+                rs = Residential.where(id: params[:id].to_i).first
+                present rs, with: UrBetterHouse::Entities::Residential
+            end
+            post '/:id/like' do
+                key = Devise::TokenAuthenticatable.token_authentication_key
+                token = params[key]
+                user = User.find_for_token_authentication({key => token})
+                # TODO like
+                result = user.favorites.find_or_create_by(residential_id: params[:id].to_i) if user
+                if result
+                    present({status: 200})
+                else
+                    present({status: 400})
+                end
             end
         end
 

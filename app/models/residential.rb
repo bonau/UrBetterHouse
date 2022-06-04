@@ -5,4 +5,6 @@ class Residential < ApplicationRecord
     validates :address, presence: true # TODO address format
     validates :total_room, presence: true
     validates :livingroom, presence: true
+
+    has_many :favorites
 end
