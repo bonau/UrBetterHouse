@@ -98,7 +98,7 @@ Devise.setup do |config|
   # Notice that if you are skipping storage for all authentication paths, you
   # may want to disable generating routes to Devise's sessions controller by
   # passing skip: :sessions to `devise_for` in your config/routes.rb
-  config.skip_session_storage = [:http_auth]
+  config.skip_session_storage = [:http_auth, :token_auth]
 
   # By default, Devise cleans up the CSRF token on authentication to
   # avoid CSRF token fixation attacks. This means that, when using AJAX
@@ -319,7 +319,7 @@ Devise::TokenAuthenticatable.setup do |config|
 
   # set the authentication key name used by this module,
   # defaults to :auth_token
-  config.token_authentication_key = :other_key_name
+  config.token_authentication_key = :auth_token
 
   # enable reset of the authentication token before the model is saved,
   # defaults to false
