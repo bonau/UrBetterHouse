@@ -61,9 +61,9 @@ describe UrBetterHouse::APIv1 do
             post '/v1/residentials/%d/like' % id, {key => token}
             expect(last_response.successful?).to eq(true)
             expect(last_response.content_type).to eq('application/json')
-            # TODO parse JSON
             data = JSON.load(last_response.body)
             expect(data).to have_key("status")
+            expect(data["status"]).to eq(200)
         end
     end
 
@@ -75,7 +75,6 @@ describe UrBetterHouse::APIv1 do
             post '/v1/residentials/%d/like' % id, {key => token}
             expect(last_response.successful?).to eq(true)
             expect(last_response.content_type).to eq('application/json')
-            # TODO parse JSON
             data = JSON.load(last_response.body)
             expect(data).to have_key("status")
             expect(data["status"]).to eq(400)

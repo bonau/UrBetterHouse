@@ -1,15 +1,39 @@
 import * as React from "react";
-import { Box } from "@mui/material";
-
+import { Box, styled } from "@mui/material";
+import { FavoriteBorder, Favorite } from "@mui/icons-material";
 export default function ResidentialShowcase(props) {
+  const [favo, setFavo] = React.useState(false);
+
+  const StyledFavorite = styled(Favorite)(({ theme }) => ({
+    display: favo ? "block" : "none",
+    color: theme.palette.primary.light,
+    margin: "1ch"
+  }));
+
+  const StyledFavoriteBorder = styled(FavoriteBorder)(({ theme }) => ({
+    display: favo ? "none" : "block",
+    color: theme.palette.primary.light,
+    margin: "1ch"
+  }));
+
   return (
     <Box
       sx={{
+        position: "relative",
         border: "1px solid #CCC",
         width: "100%",
         marginBottom: "1em"
       }}
     >
+      <Box
+        sx={{
+          position: "absolute",
+          right: "0"
+        }}
+      >
+        <StyledFavorite onClick={props.onUnfavorite} />
+        <StyledFavoriteBorder onClick={props.onFavorite} />
+      </Box>
       <img
         src={props.data.thumb_pic || "//via.placeholder.com/300x150"}
         style={{ width: "100%" }}
@@ -23,7 +47,9 @@ export default function ResidentialShowcase(props) {
         <Box>{props.data.price_per_month || Infinity} / month</Box>
         <Box>{props.data.title || "(No Title)"}</Box>
         <Box>{props.data.address || "No Address"}</Box>
-        <Box>{props.data.total_room || 0} Bed {props.data.livingroom || 0} Liv</Box>
+        <Box>
+          {props.data.total_room || 0} Bed {props.data.livingroom || 0} Liv
+        </Box>
         <Box>{props.data.mrt_line || "No Lines"}</Box>
       </Box>
     </Box>
