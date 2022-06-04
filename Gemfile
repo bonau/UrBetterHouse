@@ -64,3 +64,4 @@ gem "oj", "~> 3.13"
 gem "progress_bar", "~> 1.3"
 gem "kaminari", "~> 1.2" # paging
 gem "grape-entity", "~> 0.10.1"
+gem "devise-token_authenticatable", "~> 1.1"

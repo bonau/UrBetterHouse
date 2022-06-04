@@ -87,6 +87,8 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    devise-token_authenticatable (1.1.0)
+      devise (>= 4.0.0, < 5.0.0)
     diff-lcs (1.5.0)
     dry-configurable (0.15.0)
       concurrent-ruby (~> 1.0)
@@ -307,6 +309,7 @@ DEPENDENCIES
   byebug
   capybara (>= 2.15)
   devise (~> 4.8)
+  devise-token_authenticatable (~> 1.1)
   grape (~> 1.6)
   grape-entity (~> 0.10.1)
   jbuilder (~> 2.7)
