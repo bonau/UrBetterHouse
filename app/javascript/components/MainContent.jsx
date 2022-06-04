@@ -6,7 +6,6 @@ export default function MainContent(props) {
   const [datas, setDatas] = useState([]);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(10);
-  const [authToken, setAuthToken] = useState("");
 
   const StyledBox = styled(Box)(({ theme }) => ({
     padding: theme.spacing(2, 2),
@@ -21,7 +20,8 @@ export default function MainContent(props) {
   }));
 
   const fetchPage = (p) => {
-    fetch('/api/v1/residentials?page=' + parseInt(p)).then((res) => {
+    // TODO request constructor
+    fetch('/api/v1/residentials?page=' + parseInt(p) + '&auth_token=' + props.authToken).then((res) => {
       res.json().then((data) => {
         setDatas(data.datas);
         setPage(p);
@@ -34,22 +34,28 @@ export default function MainContent(props) {
     fetchPage(p);
   };
 
-  const onFavorite = (rid) => {
-    opt = {method: "POST", body: JSON.stringify({auth_token: authToken})}
-    fetch('/api/v1/residentials/' + parseInt(rid) + '/like').then((res) => {
-      res.json().then((data) => {
-        // TODO validate
-        setFavo(true);
+  const onFavorite = async (rid) => {
+    return new Promise((resolve, reject) => {
+      let opt = { method: "POST", body: JSON.stringify({ auth_token: props.authToken }), headers: { 'Content-Type': "application/json" } }
+      fetch('/api/v1/residentials/' + parseInt(rid) + '/like', opt).then((res) => {
+        res.json().then((data) => {
+          resolve(true)
+        }).catch((e) => {
+          reject('json parse failed')
+        })
       })
     })
   };
 
-  const onUnfavorite = () => {
-    opt = {method: "DELETE", body: JSON.stringify({auth_token: authToken})}
-    fetch('/api/v1/residentials/' + parseInt(rid) + '/like').then((res) => {
-      res.json().then((data) => {
-        // TODO validate
-        setFavo(false);
+  const onUnfavorite = async (rid) => {
+    return new Promise((resolve, reject) => {
+      let opt = { method: "DELETE", body: JSON.stringify({ auth_token: props.authToken }), headers: { 'Content-Type': "application/json" } }
+      fetch('/api/v1/residentials/' + parseInt(rid) + '/like', opt).then((res) => {
+        res.json().then((data) => {
+          resolve(false)
+        }).catch((e) => {
+          reject('json parse failed')
+        })
       })
     })
   };

@@ -16,6 +16,24 @@ export default function ResidentialShowcase(props) {
     margin: "1ch"
   }));
 
+  const handleOnFavorite = () => {
+    props.onFavorite(props.data.id).then((val) => {
+      // FIXME should update view when props update
+      props.data.liked = val;
+      setFavo(val);
+    });
+  }
+  const handleOnUnfavorite = () => {
+    props.onUnfavorite(props.data.id).then((val) => {
+      props.data.liked = val;
+      setFavo(val);
+    });
+  }
+
+  React.useEffect(() => {
+    setFavo(props.data.liked);
+  })
+
   return (
     <Box
       sx={{
@@ -31,8 +49,8 @@ export default function ResidentialShowcase(props) {
           right: "0"
         }}
       >
-        <StyledFavorite onClick={props.onUnfavorite} />
-        <StyledFavoriteBorder onClick={props.onFavorite} />
+        <StyledFavorite onClick={handleOnUnfavorite} />
+        <StyledFavoriteBorder onClick={handleOnFavorite} />
       </Box>
       <img
         src={props.data.thumb_pic || "//via.placeholder.com/300x150"}
