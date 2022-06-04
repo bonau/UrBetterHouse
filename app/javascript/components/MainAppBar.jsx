@@ -57,7 +57,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   }
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [
     mobileMoreAnchorEl,
@@ -85,7 +85,13 @@ export default function PrimarySearchAppBar() {
   };
 
   const handleLogin = (user, pass) => {
-    console.log(user, pass);
+    let data = {email: user, password: pass};
+    let opt = {method: "POST", body: JSON.stringify(data), headers: {"Content-Type": "application/json"}};
+    fetch('/api/v1/users/sign_in', opt).then((res) => {
+      res.json().then((data) => {
+        props.onLogin(data["token"])
+      });
+    });
   }
 
   const handleLoginFormClose = () => {

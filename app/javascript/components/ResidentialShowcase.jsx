@@ -16,6 +16,17 @@ export default function ResidentialShowcase(props) {
     margin: "1ch"
   }));
 
+  const handleOnFavorite = () => {
+    props.onFavorite(props.data.id).then((val) => {
+      setFavo(val);
+    });
+  }
+  const handleOnUnfavorite = () => {
+    props.onUndavorite(props.data.id).then((val) => {
+      setFavo(val);
+    });
+  }
+
   return (
     <Box
       sx={{
@@ -31,8 +42,8 @@ export default function ResidentialShowcase(props) {
           right: "0"
         }}
       >
-        <StyledFavorite onClick={props.onUnfavorite} />
-        <StyledFavoriteBorder onClick={props.onFavorite} />
+        <StyledFavorite onClick={handleOnUnfavorite} />
+        <StyledFavoriteBorder onClick={handleOnFavorite} />
       </Box>
       <img
         src={props.data.thumb_pic || "//via.placeholder.com/300x150"}
