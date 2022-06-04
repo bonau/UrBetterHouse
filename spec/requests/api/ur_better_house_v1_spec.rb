@@ -28,7 +28,10 @@ describe UrBetterHouse::APIv1 do
             User.create(valid_user)
             json = valid_user.to_json
             post('/v1/users/sign_in', json, {"CONTENT_TYPE" => "application/json"})
-            expect(last_response.successful?).to eq(true) # TODO parse JSON
+            expect(last_response.successful?).to eq(true)
+            # TODO parse JSON
+            data = JSON.load(last_response.body)
+            expect(data).to have_key("token")
         end
     end
 end

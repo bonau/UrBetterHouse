@@ -34,9 +34,14 @@ module UrBetterHouse
             post '/sign_in' do
                 user = User.where(email: params[:email]).first
                 if user && user.valid_password?(params[:password])
-                    present({status: 200})
+                    user.ensure_authentication_token!
+                    if user.save
+                        present({status: 200, token: user.authentication_token})
+                    else
+                        present({status: 500})
+                    end
                 else
-                    present({status: 500})
+                    present({status: 400})
                 end
             end
         end
