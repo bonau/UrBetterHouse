@@ -18,14 +18,21 @@ export default function ResidentialShowcase(props) {
 
   const handleOnFavorite = () => {
     props.onFavorite(props.data.id).then((val) => {
+      // FIXME should update view when props update
+      props.data.liked = val;
       setFavo(val);
     });
   }
   const handleOnUnfavorite = () => {
-    props.onUndavorite(props.data.id).then((val) => {
+    props.onUnfavorite(props.data.id).then((val) => {
+      props.data.liked = val;
       setFavo(val);
     });
   }
+
+  React.useEffect(() => {
+    setFavo(props.data.liked);
+  })
 
   return (
     <Box

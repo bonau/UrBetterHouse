@@ -5,14 +5,28 @@ import MainContent from './MainContent';
 export default function UrBetterHouseApp () {
   const [authToken, setAuthToken] = React.useState("");
 
-  const handleLogin = (token) => {
-    setAuthToken(token)
+  const handleOnLogin = (token) => {
+    setAuthToken(token);
+    storeToken(token);
   }
+
+  const storeToken = (token) => {
+    window.localStorage.setItem('token', token);
+  }
+
+  const restoreToken = () => {
+    return window.localStorage.getItem('token');
+  }
+
+  React.useEffect(() => {
+    let token = restoreToken();
+    setAuthToken(token);
+  })
 
   return (
     <>
       <CssBaseline />
-      <MainAppBar onLogin={handleLogin} />
+      <MainAppBar onLogin={handleOnLogin} authToken={authToken} />
       <MainContent authToken={authToken} />
     </>
   )

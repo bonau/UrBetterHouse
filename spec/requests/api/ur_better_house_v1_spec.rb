@@ -31,11 +31,20 @@ describe UrBetterHouse::APIv1 do
     before do
         @user = User.create(valid_user)
         @residential = Residential.create(valid_residential)
+        @like = @user.favorites.where(residential_id: @residential.id).first_or_create
     end
 
     context 'GET /v1/residentials' do
         it 'return a list of residentials' do
             get '/v1/residentials'
+            expect(last_response.successful?).to eq(true)
+            expect(last_response.content_type).to eq('application/json')
+        end
+    end
+
+    context 'GET /v1/residentials with auth_token' do
+        it 'return a list of residentials' do
+            get '/v1/residentials', {auth_token: @user.authentication_token}
             expect(last_response.successful?).to eq(true)
             expect(last_response.content_type).to eq('application/json')
         end
@@ -64,6 +73,23 @@ describe UrBetterHouse::APIv1 do
             data = JSON.load(last_response.body)
             expect(data).to have_key("status")
             expect(data["status"]).to eq(200)
+        end
+    end
+
+    context 'DELETE /v1/residentials/:id/like' do
+        it 'return status code 200' do
+            id = @residential.id
+            key = Devise::TokenAuthenticatable.token_authentication_key
+            token = @user.authentication_token
+            size = Favorite.count
+            delete '/v1/residentials/%d/like' % id, {key => token}
+            expect(last_response.successful?).to eq(true)
+            expect(last_response.content_type).to eq('application/json')
+            data = JSON.load(last_response.body)
+            expect(data).to have_key("status")
+            expect(data["status"]).to eq(200)
+            after_size = Favorite.count
+            expect(after_size - size).to eq(-1)
         end
     end
 
