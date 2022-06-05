@@ -90,7 +90,7 @@ export default function PrimarySearchAppBar(props) {
     fetch('/api/v1/users/sign_in', opt).then((res) => {
       res.json().then((data) => {
         props.onLogin(data);
-        isMenuOpen = false;
+        setAnchorEl(null);
       }).catch((reason) => {
         // TODO show alert
       });
