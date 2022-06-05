@@ -9,6 +9,9 @@ module UrBetterHouse
             expose :mrt_line
             expose :livingroom
             expose :total_room
+            expose :city
+            expose :dist
+            expose :net_size
             expose :liked do |rs, option|
                 rs.favorites.where(user_id: options[:user_id]).size > 0
             end
@@ -16,6 +19,17 @@ module UrBetterHouse
     end
     class APIv1 < Grape::API
         format :json
+
+        helpers do
+            def filter_normalize(filters)
+                result = {}
+                filters.each do |k, v|
+                    result[k.to_s.underscore] = v
+                end if filters
+                result
+            end
+        end
+
         resource :residentials do
             before do
                 @auth_key = Devise::TokenAuthenticatable.token_authentication_key
@@ -26,12 +40,14 @@ module UrBetterHouse
 
             params do
                 optional :page
+                optional :filters
                 optional :id
                 optional @auth_key
             end
             get '/' do
                 page = (params[:page] || 1).to_i
-                rs = Residential.page(page).per(6) # TODO configure residentials per page
+                filters = filter_normalize(params[:filters])
+                rs = Residential.filter_by(filters).page(page).per(6) # TODO configure residentials per page
                 present :total_page, rs.total_pages
                 present :per_page, 6
                 present :datas, rs, with: UrBetterHouse::Entities::Residential, user_id: (@user.id if @user)

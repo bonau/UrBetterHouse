@@ -67,6 +67,7 @@ export default function UrBetterHouseApp () {
     }
     query.set("page", p);
     query.set("auth_token", authToken);
+    query.set("filters", filters);
     let url = `/api/v1/residentials?${query}`;
 
     fetch(`/api/v1/residentials?${query}`).then((res) => {

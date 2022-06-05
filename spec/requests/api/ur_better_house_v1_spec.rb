@@ -25,6 +25,9 @@ describe UrBetterHouse::APIv1 do
             livingroom: 1,
             has_mrt: true,
             mrt_line: "台北小巨蛋",
+            city: "台北市",
+            dist: "松山區",
+            net_size: 30.0
         }
     end
 
@@ -47,6 +50,18 @@ describe UrBetterHouse::APIv1 do
             get '/v1/residentials', {auth_token: @user.authentication_token}
             expect(last_response.successful?).to eq(true)
             expect(last_response.content_type).to eq('application/json')
+        end
+    end
+
+    context 'GET /v1/residentials with filters' do
+        it 'return a list of residentials' do
+            get '/v1/residentials', {filters: {city: "台北市"}} # TODO hardcode
+            expect(last_response.successful?).to eq(true)
+            expect(last_response.content_type).to eq('application/json')
+            body = JSON.load(last_response.body)
+            body["datas"].each do |data|
+                expect(data["city"]).to eq("台北市")
+            end
         end
     end
 

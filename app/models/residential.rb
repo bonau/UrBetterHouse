@@ -7,4 +7,13 @@ class Residential < ApplicationRecord
     validates :livingroom, presence: true
 
     has_many :favorites
+
+    def self.filter_by(filters = nil)
+        return all if filters.nil?
+        if filters.size > 0
+            return where(**filters)
+        else
+            all
+        end
+    end
 end
