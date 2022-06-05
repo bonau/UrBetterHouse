@@ -65,6 +65,18 @@ describe UrBetterHouse::APIv1 do
         end
     end
 
+    context 'PUT /v1/residentials with params' do
+        it 'return status code 200' do
+            body = {price_per_month: 40000}.to_json
+            put '/v1/residentials/%d' % @residential.id, body, {"CONTENT_TYPE" => "application/json"} # TODO hardcode
+            expect(last_response.successful?).to eq(true)
+            expect(last_response.content_type).to eq('application/json')
+            data = JSON.load(last_response.body)
+            expect(data).to have_key("status")
+            expect(data["status"]).to eq(200)
+        end
+    end
+
     context 'GET /v1/residentials/:id' do
         it 'return a list of residentials' do
             id = @residential.id

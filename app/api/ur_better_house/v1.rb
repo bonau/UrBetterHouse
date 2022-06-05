@@ -78,6 +78,18 @@ module UrBetterHouse
                 rs = Residential.where(id: params[:id].to_i).first
                 present rs, with: UrBetterHouse::Entities::Residential
             end
+            put '/:id' do
+                rs = Residential.where(id: params[:id].to_i).first
+                if rs
+                    if rs.update_attributes(params) # TODO permit params
+                        present({status: 200})
+                    else
+                        present({status: 500})
+                    end
+                else
+                    present({status: 404})
+                end
+            end
             post '/:id/like' do
                 result = @user.favorites.find_or_create_by(residential_id: params[:id].to_i) if @user
                 if result
