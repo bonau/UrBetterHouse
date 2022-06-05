@@ -7,7 +7,8 @@ import qs from 'qs';
 
 export default function UrBetterHouseApp () {
   const [inited, setInited] = React.useState(false);
-  const [authToken, setAuthToken] = React.useState("");
+  const [authToken, setAuthToken] = React.useState(window.localStorage.getItem('token') || "");
+  const [role, setRole] = React.useState(window.localStorage.getItem('role') || "");
   const [datas, setDatas] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(1);
@@ -24,9 +25,13 @@ export default function UrBetterHouseApp () {
 
   let lastFilterChangeTime = Date.now()
 
-  const handleOnLogin = (token) => {
+  const handleOnLogin = (data) => {
+    let token = data["token"];
+    let role = data["role"];
     setAuthToken(token);
-    storeToken(token);
+    setRole(role);
+    storeCredential(token, role);
+    setInited(false);
   }
 
   const delay = (n) => {
@@ -37,9 +42,10 @@ export default function UrBetterHouseApp () {
 
   const handleFilterChanged = (filters) => {
     lastFilterChangeTime = Date.now();
+    let thisFilterChangeTime = lastFilterChangeTime;
     delay(0.5).then(() => { // to make sure not to request massively when value of silder changed
-      setFilters(filters);
-      if ((Date.now() - lastFilterChangeTime) / 1000 >= 0.5) {
+      if (thisFilterChangeTime == lastFilterChangeTime) {
+        setFilters(filters);
         fetchPage(1, filters);
       }
     });
@@ -72,6 +78,40 @@ export default function UrBetterHouseApp () {
     fetchPage(p);
   }
 
+  const handleResidentialValueChanged = (rid, key, oldValue, newValue) => {
+    updateResidentialPropertyChange(rid, key, newValue).then((value) => {
+      let newDatas = [...datas];
+      newDatas.forEach((e) => {
+        if (e.id == rid) {
+          e[key] = value;
+        }
+      })
+      setDatas(newDatas);
+    }).catch((e) => {
+      console.log(e);
+    });
+  }
+
+  const updateResidentialPropertyChange = async (rid, key, value) => {
+    return new Promise((resolve, reject) => {
+      let body = {};
+      body[key] = value;
+      let opt = {method: "PUT", body: JSON.stringify(body), headers: {"CONTENT-TYPE": "application/json"}};
+      let url = `/api/v1/residentials/${rid}`;
+      fetch(url, opt).then((res) => {
+        res.json().then((data)=> {
+          if (data["status"] == 200) {
+            resolve(value);
+          } else {
+            reject("status 500");
+          }
+        })
+      }).catch((e) => {
+        console.log(e);
+      })
+    })
+  }
+
   const fetchPage = (p = 1, argFilters = {}) => {
     let query = new URLSearchParams();
     let newFilters = {...filters, ...argFilters};
@@ -95,17 +135,12 @@ export default function UrBetterHouseApp () {
     })
   }
 
-  const storeToken = (token) => {
+  const storeCredential = (token, role) => {
     window.localStorage.setItem('token', token);
-  }
-
-  const restoreToken = () => {
-    return window.localStorage.getItem('token');
+    window.localStorage.setItem('role', role);
   }
 
   React.useEffect(() => {
-    let token = restoreToken();
-    setAuthToken(token);
     if (!inited) {
       setInited(true);
       fetchPage(1);
@@ -115,15 +150,17 @@ export default function UrBetterHouseApp () {
   return (
     <>
       <CssBaseline />
-      <MainAppBar onLogin={handleOnLogin} authToken={authToken} />
+      <MainAppBar onLogin={handleOnLogin} authToken={authToken} role={role} />
       <FilterBox filters={filters} availableFilters={availableFilters} onDataChanged={handleFilterChanged} />
       <MainContent
         authToken={authToken}
+        role={role}
         datas={datas}
         page={page}
         totalPage={totalPage}
         onFavorite={handleOnFavorite}
         onPaginationChange={handlePaginationChange}
+        onResidentialValueChanged={handleResidentialValueChanged}
       />
     </>
   )
