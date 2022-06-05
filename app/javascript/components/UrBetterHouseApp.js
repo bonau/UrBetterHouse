@@ -7,8 +7,8 @@ import qs from 'qs';
 
 export default function UrBetterHouseApp () {
   const [inited, setInited] = React.useState(false);
-  const [authToken, setAuthToken] = React.useState("");
-  const [role, setRole] = React.useState("");
+  const [authToken, setAuthToken] = React.useState(window.localStorage.getItem('token') || "");
+  const [role, setRole] = React.useState(window.localStorage.getItem('role') || "");
   const [datas, setDatas] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(1);
@@ -31,6 +31,7 @@ export default function UrBetterHouseApp () {
     setAuthToken(token);
     setRole(role);
     storeCredential(token, role);
+    setInited(false);
   }
 
   const delay = (n) => {
@@ -138,13 +139,7 @@ export default function UrBetterHouseApp () {
     window.localStorage.setItem('role', role);
   }
 
-  const restoreToken = () => {
-    setAuthToken(window.localStorage.getItem('token'));
-    setRole(window.localStorage.getItem('role'));
-  }
-
   React.useEffect(() => {
-    restoreToken();
     if (!inited) {
       setInited(true);
       fetchPage(1);
