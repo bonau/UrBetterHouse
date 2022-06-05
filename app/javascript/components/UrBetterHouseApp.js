@@ -81,10 +81,12 @@ export default function UrBetterHouseApp () {
       let newDatas = [...datas];
       newDatas.forEach((e) => {
         if (e.id == rid) {
-          e[key] = newValue;
+          e[key] = value;
         }
-      });
+      })
       setDatas(newDatas);
+    }).catch((e) => {
+      console.log(e);
     });
   }
 
@@ -95,7 +97,13 @@ export default function UrBetterHouseApp () {
       let opt = {method: "PUT", body: JSON.stringify(body), headers: {"CONTENT-TYPE": "application/json"}};
       let url = `/api/v1/residentials/${rid}`;
       fetch(url, opt).then((res) => {
-        resolve(value);
+        res.json().then((data)=> {
+          if (data["status"] == 200) {
+            resolve(value);
+          } else {
+            reject("status 500");
+          }
+        })
       }).catch((e) => {
         console.log(e);
       })
@@ -146,7 +154,7 @@ export default function UrBetterHouseApp () {
   return (
     <>
       <CssBaseline />
-      <MainAppBar onLogin={handleOnLogin} authToken={authToken} />
+      <MainAppBar onLogin={handleOnLogin} authToken={authToken} role={role} />
       <FilterBox filters={filters} availableFilters={availableFilters} onDataChanged={handleFilterChanged} />
       <MainContent
         authToken={authToken}

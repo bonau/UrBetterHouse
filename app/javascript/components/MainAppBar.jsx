@@ -108,7 +108,7 @@ export default function PrimarySearchAppBar(props) {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" color={props.role == "admin" ? "secondary" : "primary"}>
         <Toolbar>
           <IconButton
             size="large"

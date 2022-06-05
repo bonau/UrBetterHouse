@@ -46,7 +46,7 @@ export default function ResidentialShowcase(props) {
             marginRight: "1ch",
             marginLeft: "1ch",
             marginTop: "1ch",
-            ":hover": { borderBottom: "1px dotted #000", cursor: "text" }
+            ":hover": (editDisable ? {} : { borderBottom: "1px dotted #000", cursor: "text" })
           }}
         >
           {props.valueText
