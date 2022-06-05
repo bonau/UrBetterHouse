@@ -2,40 +2,36 @@ import { Box, Container, MenuItem, Select, Slider } from "@mui/material";
 import * as React from "react";
 
 export default function FilterBox(props) {
-  const [city, setCity] = React.useState(1);
-  const [dist, setDist] = React.useState(1);
-  const [netSize, setNetSize] = React.useState([10, 20]);
-  const [rentPerMonth, setRentPerMonth] = React.useState([30000, 40000]);
+  const [city, setCity] = React.useState("");
+  const [dist, setDist] = React.useState("");
+  const [netSize, setNetSize] = React.useState([10, 50]);
+  const [pricePerMonth, setPricePerMonth] = React.useState([10000, 40000]);
 
-  const dataChanged = () => {
+  const dataChanged = (argFilters) => {
     if (props.onDataChanged) {
-      props.onDataChanged({
-        city: city,
-        dist: dist,
-        netSize: netSize,
-        rentPerMonth: rentPerMonth
-      });
+      let newFilter = {...props.filters, ...argFilters};
+      props.onDataChanged(newFilter);
     }
   };
 
   const handleNetSizeChanged = (e, v) => {
     setNetSize(v);
-    dataChanged();
+    dataChanged({netSize: v});
   };
 
   const handleRentPerMonthChanged = (e, v) => {
-    setRentPerMonth(v);
-    dataChanged();
+    setPricePerMonth(v);
+    dataChanged({pricePerMonth: v});
   };
 
   const handleCitySelected = (e) => {
     setCity(e.target.value);
-    dataChanged();
+    dataChanged({city: e.target.value});
   };
 
   const handleDistSelected = (e) => {
     setDist(e.target.value);
-    dataChanged();
+    dataChanged({dist: e.target.value});
   };
 
   return (
@@ -60,15 +56,17 @@ export default function FilterBox(props) {
         <Box>
           City
           <Select value={city} onChange={handleCitySelected}>
-            <MenuItem value={1}>Taipei</MenuItem>
-            <MenuItem value={2}>New Taipei</MenuItem>
+            <MenuItem value={""}></MenuItem>
+            <MenuItem value={"台北市"}>Taipei</MenuItem> {/* TODO hardcode */}
+            <MenuItem value={"新北市"}>New Taipei</MenuItem>
           </Select>
         </Box>
         <Box>
           Dist
           <Select value={dist} onChange={handleDistSelected}>
-            <MenuItem value={1}>ZhungZheng</MenuItem>
-            <MenuItem value={2}>Ximen</MenuItem>
+            <MenuItem value={""}></MenuItem>
+            <MenuItem value={"信義區"}>Xin-Yi</MenuItem>
+            <MenuItem value={"松山區"}>SongShan</MenuItem>
           </Select>
         </Box>
         <Box>
@@ -86,14 +84,14 @@ export default function FilterBox(props) {
         <Box>
           Rent/month
           <Slider
-            value={rentPerMonth}
+            value={pricePerMonth}
             min={0}
             max={100000}
             onChange={handleRentPerMonthChanged}
           ></Slider>
           <Box sx={{ textAlign: "right", fontSize: "small" }}>
-            ${rentPerMonth[0].toLocaleString()} ~ $
-            {rentPerMonth[1].toLocaleString()}
+            ${pricePerMonth[0].toLocaleString()} ~ $
+            {pricePerMonth[1].toLocaleString()}
           </Box>
         </Box>
       </Box>

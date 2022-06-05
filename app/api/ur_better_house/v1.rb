@@ -23,8 +23,16 @@ module UrBetterHouse
         helpers do
             def filter_normalize(filters)
                 result = {}
+                if filters.is_a?(String)
+                    filters = Rack::Utils.parse_nested_query(filters)
+                end
                 filters.each do |k, v|
-                    result[k.to_s.underscore] = v
+                    if v.is_a?(Hash) # range
+                        # TODO parse object
+                        result[k.to_s.underscore] = Range.new(*v.values)
+                    else
+                        result[k.to_s.underscore] = v if !v.nil? && !v.empty?
+                    end
                 end if filters
                 result
             end
