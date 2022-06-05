@@ -35,19 +35,6 @@ export default function UrBetterHouseApp () {
     });
   }
 
-  const filterChanged = () => {
-    if (props.onDataChanged) {
-      let filter = {
-        city: city,
-        dist: dist,
-        netSize: netSize,
-        pricePerMonth: rentPerMonth
-      };
-      console.log("onDataChanged triggered ", filter);
-      props.onDataChanged(filter);
-    }
-  };
-
   const handleFilterChanged = (filters) => {
     lastFilterChangeTime = Date.now();
     delay(0.5).then(() => { // to make sure not to request massively when value of silder changed

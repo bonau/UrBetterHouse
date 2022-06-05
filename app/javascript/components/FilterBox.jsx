@@ -26,7 +26,8 @@ export default function FilterBox(props) {
 
   const handleCitySelected = (e) => {
     setCity(e.target.value);
-    dataChanged({city: e.target.value});
+    setDist("");
+    dataChanged({city: e.target.value, dist: ""}); // TODO model level control
   };
 
   const handleDistSelected = (e) => {
@@ -56,10 +57,10 @@ export default function FilterBox(props) {
         <Box>
           City
           <Select value={city} onChange={handleCitySelected}>
-            <MenuItem value={""}></MenuItem>
+            <MenuItem key={""} value={""}></MenuItem>
             {
               props.availableFilters.city.map((e) =>
-                <MenuItem value={e}>{e}</MenuItem>
+                <MenuItem key={`city-${e}`} value={e}>{e}</MenuItem>
               )
             }
           </Select>
@@ -67,10 +68,10 @@ export default function FilterBox(props) {
         <Box>
           Dist
           <Select value={dist} onChange={handleDistSelected}>
-            <MenuItem value={""}></MenuItem>
+            <MenuItem key={""} value={""}></MenuItem>
             {
               props.availableFilters.dist.map((e) =>
-                <MenuItem value={e}>{e}</MenuItem>
+                <MenuItem key={`dist-${e}`} value={e}>{e}</MenuItem>
               )
             }
           </Select>

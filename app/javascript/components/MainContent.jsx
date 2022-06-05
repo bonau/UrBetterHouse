@@ -46,7 +46,7 @@ export default function MainContent(props) {
       >
         {
           props.datas.map((e) =>
-            <ResidentialShowcase data={e} onFavorite={onFavorite} />
+            <ResidentialShowcase key={`rs-${e.id}`} data={e} onFavorite={onFavorite} />
           )
         }
       </Container>
