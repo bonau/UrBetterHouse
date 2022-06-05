@@ -123,7 +123,7 @@ module UrBetterHouse
                 if user && user.valid_password?(params[:password])
                     user.ensure_authentication_token!
                     if user.save
-                        present({status: 200, token: user.authentication_token})
+                        present({status: 200, token: user.authentication_token, role: user.role})
                     else
                         present({status: 500})
                     end

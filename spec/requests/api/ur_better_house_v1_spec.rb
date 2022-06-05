@@ -15,6 +15,15 @@ describe UrBetterHouse::APIv1 do
         }
     end
 
+    def valid_admin
+        {
+            email: "theadmin@example.com",
+            password: "yesthatsright",
+            password_confirmation: "yesthatsright",
+            role: 'admin'
+        }
+    end
+
     def valid_residential
         {
             thumb_pic: "https://urhouse.s3.amazonaws.com/images/rentals/e608961813ac47bc0cfbcac85dd2147f.jpg?31363436353736353837",
@@ -33,6 +42,7 @@ describe UrBetterHouse::APIv1 do
 
     before do
         @user = User.create(valid_user)
+        @admin = User.create(valid_admin)
         @residential = Residential.create(valid_residential)
         @like = @user.favorites.where(residential_id: @residential.id).first_or_create
     end
@@ -142,6 +152,21 @@ describe UrBetterHouse::APIv1 do
             # TODO parse JSON
             data = JSON.load(last_response.body)
             expect(data).to have_key("token")
+            expect(data).to have_key("role")
+            expect(data["role"]).not_to eq("admin")
+        end
+    end
+
+    context 'POST /v1/user/sign_in' do
+        it 'return status 200' do
+            json = valid_admin.to_json
+            post('/v1/users/sign_in', json, {"CONTENT_TYPE" => "application/json"})
+            expect(last_response.successful?).to eq(true)
+            # TODO parse JSON
+            data = JSON.load(last_response.body)
+            expect(data).to have_key("token")
+            expect(data).to have_key("role")
+            expect(data["role"]).to eq("admin")
         end
     end
 end
