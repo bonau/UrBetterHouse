@@ -81,7 +81,7 @@ module UrBetterHouse
             put '/:id' do
                 rs = Residential.where(id: params[:id].to_i).first
                 if rs
-                    if rs.update_attributes(params) # TODO permit params
+                    if rs.update(params) # TODO permit params
                         present({status: 200})
                     else
                         present({status: 500})
