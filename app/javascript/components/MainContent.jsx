@@ -22,6 +22,14 @@ export default function MainContent(props) {
     }
   };
 
+  const handleValueChanged = (rid) => {
+    return (key, oldValue, newValue) => {
+      if (props.onResidentialValueChanged) {
+        props.onResidentialValueChanged(rid, key, oldValue, newValue);
+      }
+    }
+  }
+
   const onFavorite = (rid, liked) => {
     if (props.onFavorite) {
       props.onFavorite(rid, liked);
@@ -46,7 +54,7 @@ export default function MainContent(props) {
       >
         {
           props.datas.map((e) =>
-            <ResidentialShowcase key={`rs-${e.id}`} data={e} onFavorite={onFavorite} />
+            <ResidentialShowcase key={`rs-${e.id}`} data={e} onFavorite={onFavorite} onValueChanged={handleValueChanged(e.id)} />
           )
         }
       </Container>

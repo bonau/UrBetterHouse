@@ -72,6 +72,32 @@ export default function UrBetterHouseApp () {
     fetchPage(p);
   }
 
+  const handleResidentialValueChanged = (rid, key, oldValue, newValue) => {
+    updateResidentialPropertyChange(rid, key, newValue).then((value) => {
+      let newDatas = {...datas};
+      newDatas.forEach((e) => {
+        if (e.id == rid) {
+          e[key] = newValue;
+        }
+      });
+      setDatas(newDatas);
+    });
+  }
+
+  const updateResidentialPropertyChange = async (rid, key, value) => {
+    return new Promise((resolve, reject) => {
+      let body = {};
+      body[key] = value;
+      let opt = {method: "PUT", body: JSON.stringify(body), headers: {"CONTENT-TYPE": "application/json"}};
+      let url = `/api/v1/residentials/${rid}`;
+      fetch(url, opt).then((res) => {
+        resolve(value);
+      }).catch((e) => {
+        console.log(e);
+      })
+    })
+  }
+
   const fetchPage = (p = 1, argFilters = {}) => {
     let query = new URLSearchParams();
     let newFilters = {...filters, ...argFilters};
@@ -124,6 +150,7 @@ export default function UrBetterHouseApp () {
         totalPage={totalPage}
         onFavorite={handleOnFavorite}
         onPaginationChange={handlePaginationChange}
+        onResidentialValueChanged={handleResidentialValueChanged}
       />
     </>
   )
