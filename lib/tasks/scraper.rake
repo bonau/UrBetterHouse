@@ -37,6 +37,9 @@ namespace :scraper do
           r[:livingroom] = item["livingroom"]
           r[:has_mrt] = true unless item["mrt_line"].empty?
           r[:mrt_line] = item["mrt_line"]
+          r[:city] = item["city"]
+          r[:dist] = item["dist"]
+          r[:net_size] = item["floor_size"]
           byebug unless r.save
         end if items
       else
