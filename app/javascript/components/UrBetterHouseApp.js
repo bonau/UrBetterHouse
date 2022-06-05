@@ -42,9 +42,10 @@ export default function UrBetterHouseApp () {
 
   const handleFilterChanged = (filters) => {
     lastFilterChangeTime = Date.now();
+    let thisFilterChangeTime = lastFilterChangeTime;
     delay(0.5).then(() => { // to make sure not to request massively when value of silder changed
-      setFilters(filters);
-      if ((Date.now() - lastFilterChangeTime) / 1000 >= 0.5) {
+      if (thisFilterChangeTime == lastFilterChangeTime) {
+        setFilters(filters);
         fetchPage(1, filters);
       }
     });
