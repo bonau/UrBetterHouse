@@ -3,9 +3,6 @@ import React, { useState } from "react";
 import ResidentialShowcase from "./ResidentialShowcase";
 
 export default function MainContent(props) {
-  const [datas, setDatas] = useState([]);
-  const [page, setPage] = useState(1);
-  const [totalPage, setTotalPage] = useState(10);
 
   const StyledBox = styled(Box)(({ theme }) => ({
     padding: theme.spacing(2, 2),
@@ -19,52 +16,17 @@ export default function MainContent(props) {
     alignItems: "center"
   }));
 
-  const fetchPage = (p) => {
-    // TODO request constructor
-    fetch('/api/v1/residentials?page=' + parseInt(p) + '&auth_token=' + props.authToken).then((res) => {
-      res.json().then((data) => {
-        setDatas(data.datas);
-        setPage(p);
-        setTotalPage(data.total_page);
-      });
-    })
-  }
-
-  const paginationCallback = (_, p) => {
-    fetchPage(p);
-  };
-
-  const onFavorite = async (rid) => {
-    return new Promise((resolve, reject) => {
-      let opt = { method: "POST", body: JSON.stringify({ auth_token: props.authToken }), headers: { 'Content-Type': "application/json" } }
-      fetch('/api/v1/residentials/' + parseInt(rid) + '/like', opt).then((res) => {
-        res.json().then((data) => {
-          resolve(true)
-        }).catch((e) => {
-          reject('json parse failed')
-        })
-      })
-    })
-  };
-
-  const onUnfavorite = async (rid) => {
-    return new Promise((resolve, reject) => {
-      let opt = { method: "DELETE", body: JSON.stringify({ auth_token: props.authToken }), headers: { 'Content-Type': "application/json" } }
-      fetch('/api/v1/residentials/' + parseInt(rid) + '/like', opt).then((res) => {
-        res.json().then((data) => {
-          resolve(false)
-        }).catch((e) => {
-          reject('json parse failed')
-        })
-      })
-    })
-  };
-
-  React.useEffect(() => {
-    if (datas.length == 0) {
-      fetchPage(1);
+  const handlePaginationChange = (_, p) => {
+    if (props.onPaginationChange) {
+      props.onPaginationChange(p);
     }
-  });
+  };
+
+  const onFavorite = (rid, liked) => {
+    if (props.onFavorite) {
+      props.onFavorite(rid, liked);
+    }
+  };
 
   return (
     <StyledBox>
@@ -83,17 +45,18 @@ export default function MainContent(props) {
         }}
       >
         {
-          datas.map((e) =>
-            <ResidentialShowcase data={e} onFavorite={onFavorite} onUnfavorite={onUnfavorite} />
+          props.datas.map((e) =>
+            <ResidentialShowcase data={e} onFavorite={onFavorite} />
           )
         }
       </Container>
       <Container>
         <StyledPagination
-          count={totalPage}
-          page={page}
+          count={props.totalPage}
+          page={props.page}
           size="large"
-          onChange={paginationCallback}
+          onChange={handlePaginationChange}
+          display={props.totalPage <= 1 ? 'none' : 'block'}
         ></StyledPagination>
       </Container>
     </StyledBox>

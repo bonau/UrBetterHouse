@@ -2,37 +2,26 @@ import * as React from "react";
 import { Box, styled } from "@mui/material";
 import { FavoriteBorder, Favorite } from "@mui/icons-material";
 export default function ResidentialShowcase(props) {
-  const [favo, setFavo] = React.useState(false);
-
   const StyledFavorite = styled(Favorite)(({ theme }) => ({
-    display: favo ? "block" : "none",
+    display: props.data.liked ? "block" : "none",
     color: theme.palette.primary.light,
     margin: "1ch"
   }));
 
   const StyledFavoriteBorder = styled(FavoriteBorder)(({ theme }) => ({
-    display: favo ? "none" : "block",
+    display: props.data.liked ? "none" : "block",
     color: theme.palette.primary.light,
     margin: "1ch"
   }));
 
-  const handleOnFavorite = () => {
-    props.onFavorite(props.data.id).then((val) => {
-      // FIXME should update view when props update
-      props.data.liked = val;
-      setFavo(val);
-    });
+  const handleOnFavorite = (liked = true) => {
+    if (props.onFavorite) {
+      props.onFavorite(props.data.id, liked);
+    }
   }
   const handleOnUnfavorite = () => {
-    props.onUnfavorite(props.data.id).then((val) => {
-      props.data.liked = val;
-      setFavo(val);
-    });
+    handleOnFavorite(false);
   }
-
-  React.useEffect(() => {
-    setFavo(props.data.liked);
-  })
 
   return (
     <Box
