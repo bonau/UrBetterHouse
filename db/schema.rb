@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_04_062823) do
+ActiveRecord::Schema.define(version: 2022_06_05_053202) do
 
   create_table "admins", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -45,6 +45,9 @@ ActiveRecord::Schema.define(version: 2022_06_04_062823) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "origin_id"
+    t.string "city"
+    t.string "dist"
+    t.float "net_size"
     t.index ["origin_id"], name: "index_residentials_on_origin_id"
   end
 
