@@ -17,6 +17,10 @@ export default function UrBetterHouseApp () {
     netSize: [10, 50],
     pricePerMonth: [10000, 40000],
   });
+  const [availableFilters, setAvailableFilters] = React.useState({
+    city: ["台北市", "新北市"],
+    dist: [],
+  });
 
   let lastFilterChangeTime = Date.now()
 
@@ -97,6 +101,7 @@ export default function UrBetterHouseApp () {
         setDatas(data.datas);
         setPage(p);
         setTotalPage(data.total_page);
+        setAvailableFilters(data.available_filters[0]); // TODO cannot present hash
       }).catch((e) => {
         console.log(e);
       });
@@ -124,7 +129,7 @@ export default function UrBetterHouseApp () {
     <>
       <CssBaseline />
       <MainAppBar onLogin={handleOnLogin} authToken={authToken} />
-      <FilterBox filters={filters} onDataChanged={handleFilterChanged} />
+      <FilterBox filters={filters} availableFilters={availableFilters} onDataChanged={handleFilterChanged} />
       <MainContent
         authToken={authToken}
         datas={datas}

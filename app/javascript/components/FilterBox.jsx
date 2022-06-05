@@ -57,16 +57,22 @@ export default function FilterBox(props) {
           City
           <Select value={city} onChange={handleCitySelected}>
             <MenuItem value={""}></MenuItem>
-            <MenuItem value={"台北市"}>Taipei</MenuItem> {/* TODO hardcode */}
-            <MenuItem value={"新北市"}>New Taipei</MenuItem>
+            {
+              props.availableFilters.city.map((e) =>
+                <MenuItem value={e}>{e}</MenuItem>
+              )
+            }
           </Select>
         </Box>
         <Box>
           Dist
           <Select value={dist} onChange={handleDistSelected}>
             <MenuItem value={""}></MenuItem>
-            <MenuItem value={"信義區"}>Xin-Yi</MenuItem>
-            <MenuItem value={"松山區"}>SongShan</MenuItem>
+            {
+              props.availableFilters.dist.map((e) =>
+                <MenuItem value={e}>{e}</MenuItem>
+              )
+            }
           </Select>
         </Box>
         <Box>
