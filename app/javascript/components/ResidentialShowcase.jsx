@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, styled, TextField } from "@mui/material";
+import { Box, Divider, styled, TextField } from "@mui/material";
 import { FavoriteBorder, Favorite } from "@mui/icons-material";
 export default function ResidentialShowcase(props) {
   const onValueChanged = props.onValueChanged; // TODO not to use closure
@@ -123,49 +123,52 @@ export default function ResidentialShowcase(props) {
           padding: "1em"
         }}
       >
-        <Box>
+        <Box sx={{ fontWeight: "bold", textAlign: "right" }}>
           <EditableAttribute
             attrKey={"price_per_month"}
             value={props.data.price_per_month}
             valueText={(v) => "$" + v.toLocaleString()}
             default={"Infinity"}
           ></EditableAttribute>
-          /month
+          <small>/month</small>
         </Box>
-        <Box>
+        <Divider />
+        <Box sx={{ fontWeight: "bold" }}>
           <EditableAttribute
             attrKey={"title"}
             value={props.data.title}
             default={"(No Title)"}
           ></EditableAttribute>
         </Box>
-        <Box>
-          <EditableAttribute
-            attrKey={"address"}
-            value={props.data.address}
-            default={"No Address"}
-          ></EditableAttribute>
-        </Box>
-        <Box>
-          <EditableAttribute
-            attrKey={"total_room"}
-            value={props.data.total_room}
-            default={0}
-          ></EditableAttribute>
-          Bedrooms
-          <EditableAttribute
-            attrKey={"livingroom"}
-            value={props.data.livingroom}
-            default={0}
-          ></EditableAttribute>
-          Livingrooms
-        </Box>
-        <Box>
-          <EditableAttribute
-            attrKey={"mrt_line"}
-            value={props.data.mrt_line}
-            default={"No Lines"}
-          ></EditableAttribute>
+        <Box sx={{ fontSize: "small" }}>
+          <Box>
+            <EditableAttribute
+              attrKey={"address"}
+              value={props.data.address}
+              default={"No Address"}
+            ></EditableAttribute>
+          </Box>
+          <Box>
+            <EditableAttribute
+              attrKey={"total_room"}
+              value={props.data.total_room}
+              default={0}
+            ></EditableAttribute>
+            Bedrooms
+            <EditableAttribute
+              attrKey={"livingroom"}
+              value={props.data.livingroom}
+              default={0}
+            ></EditableAttribute>
+            Livingrooms
+          </Box>
+          <Box>
+            <EditableAttribute
+              attrKey={"mrt_line"}
+              value={props.data.mrt_line}
+              default={"No Lines"}
+            ></EditableAttribute>
+          </Box>
         </Box>
       </Box>
     </Box>
