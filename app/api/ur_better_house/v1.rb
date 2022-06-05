@@ -9,32 +9,70 @@ module UrBetterHouse
             expose :mrt_line
             expose :livingroom
             expose :total_room
+            expose :city
+            expose :dist
+            expose :net_size
             expose :liked do |rs, option|
+                # TODO performance issue
                 rs.favorites.where(user_id: options[:user_id]).size > 0
             end
         end
     end
     class APIv1 < Grape::API
         format :json
+
+        helpers do
+            def filter_normalize(filters)
+                result = {}
+                if filters.is_a?(String)
+                    filters = Rack::Utils.parse_nested_query(filters)
+                end
+                filters.each do |k, v|
+                    if v.is_a?(Hash) # range
+                        # TODO parse object
+                        result[k.to_s.underscore] = Range.new(*v.values)
+                    else
+                        result[k.to_s.underscore] = v if !v.nil? && !v.empty?
+                    end
+                end if filters
+                result
+            end
+
+            def available_filters
+                # TODO cannot present hash
+                [{
+                    city: ["台北市", "新北市"], # TODO hardcode
+                    dist: available_dists(@filters["city"]),
+                }]
+            end
+
+            def available_dists(city)
+                Residential.where(city: city).pluck(:dist).uniq
+            end
+        end
+
         resource :residentials do
             before do
                 @auth_key = Devise::TokenAuthenticatable.token_authentication_key
                 @token = params[@auth_key]
                 @auth_param = {@auth_key => @token}
                 @user = User.find_for_token_authentication(@auth_param)
+                @filters = filter_normalize(params[:filters])
             end
 
             params do
                 optional :page
+                optional :filters
                 optional :id
                 optional @auth_key
             end
             get '/' do
                 page = (params[:page] || 1).to_i
-                rs = Residential.page(page).per(6) # TODO configure residentials per page
+                rs = Residential.filter_by(@filters).page(page).per(6) # TODO configure residentials per page
                 present :total_page, rs.total_pages
                 present :per_page, 6
                 present :datas, rs, with: UrBetterHouse::Entities::Residential, user_id: (@user.id if @user)
+                present :available_filters, available_filters
             end
             get '/:id' do
                 rs = Residential.where(id: params[:id].to_i).first

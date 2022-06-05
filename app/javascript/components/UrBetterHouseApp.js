@@ -3,13 +3,24 @@ import * as React from 'react';
 import MainAppBar from './MainAppBar'
 import MainContent from './MainContent';
 import FilterBox from './FilterBox';
+import qs from 'qs';
 
 export default function UrBetterHouseApp () {
+  const [inited, setInited] = React.useState(false);
   const [authToken, setAuthToken] = React.useState("");
   const [datas, setDatas] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(1);
-  const [filters, setFilters] = React.useState({});
+  const [filters, setFilters] = React.useState({
+    city: "",
+    dist: "",
+    netSize: [10, 50],
+    pricePerMonth: [10000, 40000],
+  });
+  const [availableFilters, setAvailableFilters] = React.useState({
+    city: ["台北市", "新北市"],
+    dist: [],
+  });
 
   let lastFilterChangeTime = Date.now()
 
@@ -22,11 +33,12 @@ export default function UrBetterHouseApp () {
     return new Promise((resolve) => {
         setTimeout(resolve,n * 1000);
     });
-}
+  }
 
   const handleFilterChanged = (filters) => {
     lastFilterChangeTime = Date.now();
     delay(0.5).then(() => { // to make sure not to request massively when value of silder changed
+      setFilters(filters);
       if ((Date.now() - lastFilterChangeTime) / 1000 >= 0.5) {
         fetchPage(1, filters);
       }
@@ -62,11 +74,13 @@ export default function UrBetterHouseApp () {
 
   const fetchPage = (p = 1, argFilters = {}) => {
     let query = new URLSearchParams();
-    if (argFilters.length > 0) {
-      setFilters({...filters, ...argFilters})
+    let newFilters = {...filters, ...argFilters};
+    if (Object.keys(argFilters).length > 0) {
+      setFilters(newFilters);
     }
     query.set("page", p);
     query.set("auth_token", authToken);
+    query.set("filters", qs.stringify(newFilters));
     let url = `/api/v1/residentials?${query}`;
 
     fetch(`/api/v1/residentials?${query}`).then((res) => {
@@ -74,6 +88,7 @@ export default function UrBetterHouseApp () {
         setDatas(data.datas);
         setPage(p);
         setTotalPage(data.total_page);
+        setAvailableFilters(data.available_filters[0]); // TODO cannot present hash
       }).catch((e) => {
         console.log(e);
       });
@@ -91,9 +106,9 @@ export default function UrBetterHouseApp () {
   React.useEffect(() => {
     let token = restoreToken();
     setAuthToken(token);
-
-    if (datas.length == 0) {
-      fetchPage();
+    if (!inited) {
+      setInited(true);
+      fetchPage(1);
     }
   })
 
@@ -101,7 +116,7 @@ export default function UrBetterHouseApp () {
     <>
       <CssBaseline />
       <MainAppBar onLogin={handleOnLogin} authToken={authToken} />
-      <FilterBox filters={filters} onDataChanged={handleFilterChanged} />
+      <FilterBox filters={filters} availableFilters={availableFilters} onDataChanged={handleFilterChanged} />
       <MainContent
         authToken={authToken}
         datas={datas}

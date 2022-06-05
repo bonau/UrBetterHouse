@@ -14,14 +14,14 @@ export default function ResidentialShowcase(props) {
     margin: "1ch"
   }));
 
-  const handleOnFavorite = (liked = true) => {
+  const handleOnFavorite = (e, liked = true) => {
     if (props.onFavorite) {
       props.onFavorite(props.data.id, liked);
     }
-  }
-  const handleOnUnfavorite = () => {
-    handleOnFavorite(false);
-  }
+  };
+  const handleOnUnfavorite = (e) => {
+    handleOnFavorite(e, false);
+  };
 
   return (
     <Box
