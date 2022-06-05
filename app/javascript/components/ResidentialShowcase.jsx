@@ -6,10 +6,8 @@ export default function ResidentialShowcase(props) {
   const EditableAttribute = (props) => {
     const [value, setValue] = React.useState(props.value);
     const [isEdit, setIsEdit] = React.useState(false);
-    const anchorEl = React.useRef(null);
 
     const handleOnClick = (e) => {
-      anchorEl.current.focus();
       setIsEdit(!isEdit);
     };
 
@@ -23,17 +21,12 @@ export default function ResidentialShowcase(props) {
       if (!(e.target.value == props.value)) {
         fireValueChanged(props.attrKey, props.value, e.target.value);
       }
+      setIsEdit(false);
     };
 
     const handleOnChange = (e) => {
       setValue(e.target.value);
     }
-
-    React.useEffect(() => {
-      if (anchorEl.current) {
-        anchorEl.current.focus();
-      }
-    })
 
     return (
       <Box sx={{ display: "inline-block" }} onClick={handleOnClick}>
@@ -57,13 +50,12 @@ export default function ResidentialShowcase(props) {
           }}
         >
           <TextField
-            ref={anchorEl}
             variant="standard"
             onBlur={handleOnBlur}
             onChange={handleOnChange}
             autoFocus
             value={value}
-            sx={{ width: "10ch", lineHeight: "1em" }}
+            sx={{ lineHeight: "1em" }}
           ></TextField>
         </Box>
       </Box>
