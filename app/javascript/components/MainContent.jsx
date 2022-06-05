@@ -54,7 +54,7 @@ export default function MainContent(props) {
       >
         {
           props.datas.map((e) =>
-            <ResidentialShowcase key={`rs-${e.id}`} data={e} onFavorite={onFavorite} onValueChanged={handleValueChanged(e.id)} />
+            <ResidentialShowcase key={`rs-${e.id}`} role={props.role} data={e} onFavorite={onFavorite} onValueChanged={handleValueChanged(e.id)} />
           )
         }
       </Container>

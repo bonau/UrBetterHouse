@@ -3,13 +3,16 @@ import { Box, styled, TextField } from "@mui/material";
 import { FavoriteBorder, Favorite } from "@mui/icons-material";
 export default function ResidentialShowcase(props) {
   const onValueChanged = props.onValueChanged; // TODO not to use closure
+  const editDisable = !(props.role == "admin")
   const EditableAttribute = (props) => {
     const [value, setValue] = React.useState(props.value);
     const [isEdit, setIsEdit] = React.useState(false);
     const inputRef = React.useRef(null);
 
     const handleOnClick = (e) => {
-      setIsEdit(!isEdit);
+      if (!editDisable) {
+        setIsEdit(true);
+      }
     };
 
     const fireValueChanged = (k, o, n) => {

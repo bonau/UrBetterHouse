@@ -89,7 +89,7 @@ export default function PrimarySearchAppBar(props) {
     let opt = {method: "POST", body: JSON.stringify(data), headers: {"Content-Type": "application/json"}};
     fetch('/api/v1/users/sign_in', opt).then((res) => {
       res.json().then((data) => {
-        props.onLogin(data["token"]);
+        props.onLogin(data);
         isMenuOpen = false;
       }).catch((reason) => {
         // TODO show alert

@@ -8,6 +8,7 @@ import qs from 'qs';
 export default function UrBetterHouseApp () {
   const [inited, setInited] = React.useState(false);
   const [authToken, setAuthToken] = React.useState("");
+  const [role, setRole] = React.useState("");
   const [datas, setDatas] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(1);
@@ -24,9 +25,12 @@ export default function UrBetterHouseApp () {
 
   let lastFilterChangeTime = Date.now()
 
-  const handleOnLogin = (token) => {
+  const handleOnLogin = (data) => {
+    let token = data["token"];
+    let role = data["role"];
     setAuthToken(token);
-    storeToken(token);
+    setRole(role);
+    storeCredential(token, role);
   }
 
   const delay = (n) => {
@@ -121,17 +125,18 @@ export default function UrBetterHouseApp () {
     })
   }
 
-  const storeToken = (token) => {
+  const storeCredential = (token, role) => {
     window.localStorage.setItem('token', token);
+    window.localStorage.setItem('role', role);
   }
 
   const restoreToken = () => {
-    return window.localStorage.getItem('token');
+    setAuthToken(window.localStorage.getItem('token'));
+    setRole(window.localStorage.getItem('role'));
   }
 
   React.useEffect(() => {
-    let token = restoreToken();
-    setAuthToken(token);
+    restoreToken();
     if (!inited) {
       setInited(true);
       fetchPage(1);
@@ -145,6 +150,7 @@ export default function UrBetterHouseApp () {
       <FilterBox filters={filters} availableFilters={availableFilters} onDataChanged={handleFilterChanged} />
       <MainContent
         authToken={authToken}
+        role={role}
         datas={datas}
         page={page}
         totalPage={totalPage}
