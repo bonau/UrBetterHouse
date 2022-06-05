@@ -127,6 +127,7 @@ export default function ResidentialShowcase(props) {
           <EditableAttribute
             attrKey={"price_per_month"}
             value={props.data.price_per_month}
+            valueText={(v) => "$" + v.toLocaleString()}
             default={"Infinity"}
           ></EditableAttribute>
           /month
