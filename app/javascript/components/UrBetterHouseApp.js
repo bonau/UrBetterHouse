@@ -74,7 +74,7 @@ export default function UrBetterHouseApp () {
 
   const handleResidentialValueChanged = (rid, key, oldValue, newValue) => {
     updateResidentialPropertyChange(rid, key, newValue).then((value) => {
-      let newDatas = {...datas};
+      let newDatas = [...datas];
       newDatas.forEach((e) => {
         if (e.id == rid) {
           e[key] = newValue;
