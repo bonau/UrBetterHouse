@@ -16,4 +16,4 @@ test:
 
 production:
   <<: *default
-  url: <%= ENV.fetch('HEROKU_POSTGRESQL_BLACK_URL', '') %>
+  url: <%= ENV.fetch('DATABASE_URL', ENV.fetch('HEROKU_POSTGRESQL_BLACK_URL', '')) %>
