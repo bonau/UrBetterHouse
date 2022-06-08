@@ -209,9 +209,9 @@ export default function PrimarySearchAppBar(props) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color={props.role == "admin" ? "secondary" : "primary"}>
         <Toolbar>
-          {renderDrawerIcon}
+          {/* renderDrawerIcon */}
           {renderLogo}
-          {renderSearchBar}
+          {/* renderSearchBar */}
 
           <Box sx={{ flexGrow: 1 }} />
 
