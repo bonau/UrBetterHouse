@@ -57,6 +57,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   }
 }));
 
+/*
+ * props: {
+ *   onLogin: callback({
+ *     token: string,
+ *     role: admin | user | "",
+ *   }),
+ *   authToken: string
+ * }
+ */
+
 export default function PrimarySearchAppBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [
@@ -64,10 +74,9 @@ export default function PrimarySearchAppBar(props) {
     setMobileMoreAnchorEl
   ] = React.useState(null);
 
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isLoginDialogOpen = Boolean(anchorEl);
 
-  const handleProfileMenuOpen = (event) => {
+  const handleLoginDialogOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -89,12 +98,21 @@ export default function PrimarySearchAppBar(props) {
     let opt = {method: "POST", body: JSON.stringify(data), headers: {"Content-Type": "application/json"}};
     fetch('/api/v1/users/sign_in', opt).then((res) => {
       res.json().then((data) => {
-        props.onLogin(data);
+        if (props.onLogin) {
+          props.onLogin(data);
+        }
         setAnchorEl(null);
       }).catch((reason) => {
         // TODO show alert
       });
     });
+  }
+
+  const handleLogout = () => {
+    // 'cuz API is stateless, clear token data instead of delete session
+    if (props.onLogout) {
+      props.onLogout();
+    }
   }
 
   const handleLoginFormClose = () => {
@@ -103,53 +121,72 @@ export default function PrimarySearchAppBar(props) {
 
   const menuId = "primary-search-account-menu";
   const renderLoginForm = (
-    <LoginForm open={isMenuOpen} onSubmit={handleLogin} onClose={handleLoginFormClose} />
+    <LoginForm open={isLoginDialogOpen} onSubmit={handleLogin} onClose={handleLoginFormClose} />
   );
+
+  const renderDrawerIcon = (
+    <IconButton
+    size="large"
+    edge="start"
+    color="inherit"
+    aria-label="open drawer"
+    sx={{ mr: 2 }}
+    >
+      <MenuIcon />
+    </IconButton>
+  )
+
+  const renderLogo = (
+    <Typography
+    variant="h6"
+    noWrap
+    component="div"
+    sx={{ display: { xs: "none", sm: "block" } }}
+    >
+      UrBetterHouse
+    </Typography>
+  )
+
+  const renderSearchBar = (
+    <Search>
+      <SearchIconWrapper>
+        <SearchIcon />
+      </SearchIconWrapper>
+      <StyledInputBase
+        placeholder="Search…"
+        inputProps={{ "aria-label": "search" }}
+      />
+    </Search>
+  )
+
+  const renderAccountIcon = (
+    <Box sx={{ display: { xs: "flex" } }}>
+      <IconButton
+        size="large"
+        edge="end"
+        aria-label="account of current user"
+        aria-controls={menuId}
+        aria-haspopup="true"
+        onClick={props.authToken ? handleLogout : handleLoginDialogOpen}
+        color="inherit"
+      >
+        <AccountCircle />
+      </IconButton>
+    </Box>
+  )
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color={props.role == "admin" ? "secondary" : "primary"}>
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
-            UrBetterHouse
-          </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
+          {renderDrawerIcon}
+          {renderLogo}
+          {renderSearchBar}
+
           <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: "flex" } }}>
-            <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </Box>
+
+          {props.authToken ? "(User Logged In)" : "(Logged Out)"}
+          {renderAccountIcon}
         </Toolbar>
       </AppBar>
       {renderLoginForm}

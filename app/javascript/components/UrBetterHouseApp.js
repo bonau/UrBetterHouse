@@ -34,6 +34,13 @@ export default function UrBetterHouseApp () {
     setInited(false);
   }
 
+  const handleLogout = () => {
+    setAuthToken("");
+    setRole("");
+    storeCredential();
+    setInited(false);
+  }
+
   const delay = (n) => {
     return new Promise((resolve) => {
         setTimeout(resolve,n * 1000);
@@ -136,8 +143,13 @@ export default function UrBetterHouseApp () {
   }
 
   const storeCredential = (token, role) => {
-    window.localStorage.setItem('token', token);
-    window.localStorage.setItem('role', role);
+    if (token) {
+      window.localStorage.setItem('token', token);
+      window.localStorage.setItem('role', role);
+    } else {
+      window.localStorage.removeItem('token');
+      window.localStorage.removeItem('role');
+    }
   }
 
   React.useEffect(() => {
@@ -150,7 +162,7 @@ export default function UrBetterHouseApp () {
   return (
     <>
       <CssBaseline />
-      <MainAppBar onLogin={handleOnLogin} authToken={authToken} role={role} />
+      <MainAppBar onLogin={handleOnLogin} onLogout={handleLogout} authToken={authToken} role={role} />
       <FilterBox filters={filters} availableFilters={availableFilters} onDataChanged={handleFilterChanged} />
       <MainContent
         authToken={authToken}
