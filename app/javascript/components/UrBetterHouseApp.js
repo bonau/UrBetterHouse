@@ -25,7 +25,7 @@ export default function UrBetterHouseApp () {
 
   let lastFilterChangeTime = Date.now()
 
-  const handleOnLogin = (data) => {
+  const handleLogin = (data) => {
     let token = data["token"];
     let role = data["role"];
     setAuthToken(token);
@@ -58,7 +58,7 @@ export default function UrBetterHouseApp () {
     });
   }
 
-  const handleOnFavorite = (rid, liked = true) => {
+  const handleFavorite = (rid, liked = true) => {
     let opt = {
       method: (liked ? "POST" : "DELETE"),
       body: JSON.stringify({ auth_token: authToken }),
@@ -162,7 +162,7 @@ export default function UrBetterHouseApp () {
   return (
     <>
       <CssBaseline />
-      <MainAppBar onLogin={handleOnLogin} onLogout={handleLogout} authToken={authToken} role={role} />
+      <MainAppBar onLogin={handleLogin} onLogout={handleLogout} authToken={authToken} role={role} />
       <FilterBox filters={filters} availableFilters={availableFilters} onDataChanged={handleFilterChanged} />
       <MainContent
         authToken={authToken}
@@ -170,7 +170,7 @@ export default function UrBetterHouseApp () {
         datas={datas}
         page={page}
         totalPage={totalPage}
-        onFavorite={handleOnFavorite}
+        onFavorite={handleFavorite}
         onPaginationChange={handlePaginationChange}
         onResidentialValueChanged={handleResidentialValueChanged}
       />

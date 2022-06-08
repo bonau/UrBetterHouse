@@ -63,6 +63,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
  *     token: string,
  *     role: admin | user | "",
  *   }),
+ *   onLogout: callback()
  *   authToken: string
  * }
  */
