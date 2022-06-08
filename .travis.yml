@@ -20,6 +20,6 @@ before_deploy:
 deploy:
   - provider: heroku
     api_key: $HEROKU_API_KEY
-    app: ur-better-house
+    app: $HEROKU_APP
     on:
-      branch: develop
+      branch: $HEROKU_BRANCH
