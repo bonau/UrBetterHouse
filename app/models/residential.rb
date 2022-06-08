@@ -8,12 +8,16 @@ class Residential < ApplicationRecord
 
     has_many :favorites
 
-    def self.filter_by(filters = nil)
-        return all if filters.nil?
-        if filters.size > 0
-            return where(**filters)
-        else
-            all
-        end
+    # def self.filter_by(filters = nil)
+    #     return all if filters.nil?
+    #     if filters.size > 0
+    #         return where(**filters)
+    #     else
+    #         all
+    #     end
+    # end
+
+    def liked(options)
+        self.favorites.where(user_id: options[:user_id]).size > 0
     end
 end

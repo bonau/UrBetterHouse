@@ -81,6 +81,13 @@ export default function UrBetterHouseApp () {
     })
   }
 
+  const handleFavoriteList = () => {
+    const page = 1;
+    const argFilters = {};
+    const liked = true;
+    fetchPage(page, argFilters, liked);
+  }
+
   const handlePaginationChange = (p) => {
     fetchPage(p);
   }
@@ -97,6 +104,11 @@ export default function UrBetterHouseApp () {
     }).catch((e) => {
       console.log(e);
     });
+  }
+
+  const handleLogoClick = () => {
+    fetchPage(1);
+    setInited(false);
   }
 
   const updateResidentialPropertyChange = async (rid, key, value) => {
@@ -119,7 +131,7 @@ export default function UrBetterHouseApp () {
     })
   }
 
-  const fetchPage = (p = 1, argFilters = {}) => {
+  const fetchPage = (p = 1, argFilters = {}, onlyFavorites = false) => {
     let query = new URLSearchParams();
     let newFilters = {...filters, ...argFilters};
     if (Object.keys(argFilters).length > 0) {
@@ -127,6 +139,7 @@ export default function UrBetterHouseApp () {
     }
     query.set("page", p);
     query.set("auth_token", authToken);
+    query.set("liked", onlyFavorites);
     query.set("filters", qs.stringify(newFilters));
     let url = `/api/v1/residentials?${query}`;
 
@@ -162,7 +175,14 @@ export default function UrBetterHouseApp () {
   return (
     <>
       <CssBaseline />
-      <MainAppBar onLogin={handleLogin} onLogout={handleLogout} authToken={authToken} role={role} />
+      <MainAppBar
+        onLogin={handleLogin}
+        onLogout={handleLogout}
+        onLogoClick={handleLogoClick}
+        onFavoriteList={handleFavoriteList}
+        authToken={authToken}
+        role={role}
+      />
       <FilterBox filters={filters} availableFilters={availableFilters} onDataChanged={handleFilterChanged} />
       <MainContent
         authToken={authToken}

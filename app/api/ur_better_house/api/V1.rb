@@ -14,7 +14,8 @@ module UrBetterHouse
             expose :net_size
             expose :liked do |rs, option|
                 # TODO performance issue
-                rs.favorites.where(user_id: options[:user_id]).size > 0
+                # FIXME option[:user_id] is fine here but is hash in model
+                rs.liked(user_id: option[:user_id])
             end
         end
     end
@@ -60,6 +61,7 @@ module UrBetterHouse
                         @auth_param = {@auth_key => ("%s" % @token)}
                         @user = User.find_for_token_authentication(@auth_param)
                         @filters = filter_normalize(params[:filters])
+                        @only_liked = params[:liked] == 'true'
                     rescue => e
                         raise e.backtrace.inspect
                     end
@@ -73,7 +75,13 @@ module UrBetterHouse
                 end
                 get '/' do
                     page = (params[:page] || 1).to_i
-                    rs = Residential.filter_by(@filters).page(page).per(6) # TODO configure residentials per page
+                    rs = Residential
+                    if @user && @only_liked
+                        rids = @user.favorites.pluck(:residential_id)
+                        rs = rs.where(id: rids)
+                    end
+                    rs = rs.where(@filters)
+                    rs = rs.page(page).per(6) # TODO configure residentials per page
                     present :total_page, rs.total_pages
                     present :per_page, 6
                     present :datas, rs, with: UrBetterHouse::Entities::Residential, user_id: (@user.id if @user)

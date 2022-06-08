@@ -16,6 +16,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import LoginForm from "./LoginForm";
+import { Favorite } from "@mui/icons-material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -63,7 +64,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
  *     token: string,
  *     role: admin | user | "",
  *   }),
- *   onLogout: callback()
+ *   onLogout: callback(),
+ *   onFavorite: callback(),
  *   authToken: string
  * }
  */
@@ -93,6 +95,18 @@ export default function PrimarySearchAppBar(props) {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  const handleFavoriteList = (e) => {
+    if (props.onFavoriteList) {
+      props.onFavoriteList()
+    }
+  }
+
+  const handleLogoClick = (e) => {
+    if (props.onLogoClick) {
+      props.onLogoClick()
+    }
+  }
 
   const handleLogin = (user, pass) => {
     let data = {email: user, password: pass};
@@ -142,6 +156,7 @@ export default function PrimarySearchAppBar(props) {
     variant="h6"
     noWrap
     component="div"
+    onClick={handleLogoClick}
     sx={{ display: { xs: "none", sm: "block" } }}
     >
       UrBetterHouse
@@ -176,6 +191,20 @@ export default function PrimarySearchAppBar(props) {
     </Box>
   )
 
+  const renderFavoriteListIcon = (
+    <Box sx={{ display: { xs: "flex" } }}>
+      <IconButton
+        size="large"
+        edge="end"
+        aria-label="favorite list by me"
+        onClick={props.authToken ? handleFavoriteList : handleLoginDialogOpen}
+        color="inherit"
+      >
+        <Favorite />
+      </IconButton>
+    </Box>
+  )
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color={props.role == "admin" ? "secondary" : "primary"}>
@@ -187,6 +216,7 @@ export default function PrimarySearchAppBar(props) {
           <Box sx={{ flexGrow: 1 }} />
 
           {props.authToken ? "(User Logged In)" : "(Logged Out)"}
+          {renderFavoriteListIcon}
           {renderAccountIcon}
         </Toolbar>
       </AppBar>

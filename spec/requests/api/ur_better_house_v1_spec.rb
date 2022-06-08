@@ -63,6 +63,14 @@ describe UrBetterHouse::API::V1 do
         end
     end
 
+    context 'GET /v1/residentials with auth_token and liked' do
+        it 'return a list of residentials' do
+            get '/v1/residentials', {auth_token: @user.authentication_token, liked: 'true'}
+            expect(last_response.successful?).to eq(true)
+            expect(last_response.content_type).to eq('application/json')
+        end
+    end
+
     context 'GET /v1/residentials with filters' do
         it 'return a list of residentials' do
             get '/v1/residentials', {filters: {city: "台北市"}} # TODO hardcode
