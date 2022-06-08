@@ -9,7 +9,7 @@ export default function ResidentialShowcase(props) {
     const [isEdit, setIsEdit] = React.useState(false);
     const inputRef = React.useRef(null);
 
-    const handleOnClick = (e) => {
+    const handleClick = (e) => {
       if (!editDisable) {
         setIsEdit(true);
       }
@@ -21,14 +21,14 @@ export default function ResidentialShowcase(props) {
       }
     };
 
-    const handleOnBlur = (e) => {
+    const handleBlur = (e) => {
       if (!(e.target.value == props.value)) {
         fireValueChanged(props.attrKey, props.value, e.target.value);
       }
       setIsEdit(false);
     };
 
-    const handleOnChange = (e) => {
+    const handleChange = (e) => {
       setValue(e.target.value);
     }
 
@@ -39,7 +39,7 @@ export default function ResidentialShowcase(props) {
     }, [isEdit])
 
     return (
-      <Box sx={{ display: "inline-block" }} onClick={handleOnClick}>
+      <Box sx={{ display: "inline-block" }} onClick={handleClick}>
         <Box
           sx={{
             display: isEdit ? "none" : "inline-block",
@@ -57,8 +57,8 @@ export default function ResidentialShowcase(props) {
           <TextField
             inputRef={inputRef} /* use inputRef instead of due to Material UI document */
             variant="standard"
-            onBlur={handleOnBlur}
-            onChange={handleOnChange}
+            onBlur={handleBlur}
+            onChange={handleChange}
             autoFocus
             value={value}
             sx={{
@@ -86,14 +86,27 @@ export default function ResidentialShowcase(props) {
     margin: "1ch"
   }));
 
-  const handleOnFavorite = (e, liked = true) => {
+  const handleFavorite = (e, liked = true) => {
     if (props.onFavorite) {
       props.onFavorite(props.data.id, liked);
     }
   };
-  const handleOnUnfavorite = (e) => {
-    handleOnFavorite(e, false);
+  const handleUnfavorite = (e) => {
+    handleFavorite(e, false);
   };
+
+  const renderFavoriteIcon = (
+    <Box
+      display={props.showLike ? 'block' : 'none'}
+      sx={{
+        position: "absolute",
+        right: "0"
+      }}
+    >
+      <StyledFavorite onClick={handleUnfavorite} />
+      <StyledFavoriteBorder onClick={handleFavorite} />
+    </Box>
+  );
 
   return (
     <Box
@@ -104,15 +117,7 @@ export default function ResidentialShowcase(props) {
         marginBottom: "1em"
       }}
     >
-      <Box
-        sx={{
-          position: "absolute",
-          right: "0"
-        }}
-      >
-        <StyledFavorite onClick={handleOnUnfavorite} />
-        <StyledFavoriteBorder onClick={handleOnFavorite} />
-      </Box>
+      {renderFavoriteIcon}
       <img
         src={props.data.thumb_pic || "//via.placeholder.com/300x150"}
         style={{ width: "100%" }}

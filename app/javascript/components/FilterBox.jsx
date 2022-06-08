@@ -39,7 +39,7 @@ export default function FilterBox(props) {
     <Container>
       <Box
         sx={{
-          display: "flex",
+          display: (props.open ? "flex" : "none"),
           flexDirection: "row",
           flexWrap: "wrap",
           padding: "2ch",

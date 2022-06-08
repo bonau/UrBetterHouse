@@ -12,6 +12,7 @@ export default function UrBetterHouseApp () {
   const [datas, setDatas] = React.useState([]);
   const [page, setPage] = React.useState(1);
   const [totalPage, setTotalPage] = React.useState(1);
+  const [filterOpen, setFilterOpen] = React.useState(true);
   const [filters, setFilters] = React.useState({
     city: "",
     dist: "",
@@ -66,14 +67,18 @@ export default function UrBetterHouseApp () {
     }
     fetch(`/api/v1/residentials/${parseInt(rid)}/like`, opt).then((res) => {
       res.json().then((data) => {
-        datas.filter((e) => {
-          return e.id == rid;
-        }).forEach((e) => {
-          e.liked = liked;
-        })
+        if (data["status"] == 200) {
+          datas.filter((e) => {
+            return e.id == rid;
+          }).forEach((e) => {
+            e.liked = liked;
+          })
 
-        // FIXME can cause performance problem
-        setDatas([...datas]);
+          // FIXME can cause performance problem
+          setDatas([...datas]);
+        } else if (data["status"] == 400) {
+          // TODO login form
+        }
       }).catch((e) => {
         console.log(e);
         // TODO catch exception
@@ -86,6 +91,7 @@ export default function UrBetterHouseApp () {
     const argFilters = {};
     const liked = true;
     fetchPage(page, argFilters, liked);
+    setFilterOpen(false);
   }
 
   const handlePaginationChange = (p) => {
@@ -108,6 +114,7 @@ export default function UrBetterHouseApp () {
 
   const handleLogoClick = () => {
     fetchPage(1);
+    setFilterOpen(true);
     setInited(false);
   }
 
@@ -183,7 +190,7 @@ export default function UrBetterHouseApp () {
         authToken={authToken}
         role={role}
       />
-      <FilterBox filters={filters} availableFilters={availableFilters} onDataChanged={handleFilterChanged} />
+      <FilterBox open={filterOpen} filters={filters} availableFilters={availableFilters} onDataChanged={handleFilterChanged} />
       <MainContent
         authToken={authToken}
         role={role}

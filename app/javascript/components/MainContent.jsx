@@ -55,7 +55,7 @@ export default function MainContent(props) {
         {
           props.datas.map((e) =>
             // TODO editable instead of passing role
-            <ResidentialShowcase key={`rs-${e.id}`} role={props.role} data={e} onFavorite={onFavorite} onValueChanged={handleValueChanged(e.id)} />
+            <ResidentialShowcase key={`rs-${e.id}`} role={props.role} data={e} onFavorite={onFavorite} onValueChanged={handleValueChanged(e.id)} showLike={props.authToken ? "true" : null} />
           )
         }
       </Container>
