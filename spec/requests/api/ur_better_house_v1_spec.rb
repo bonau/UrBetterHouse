@@ -1,10 +1,10 @@
 require 'rails_helper'
 
-describe UrBetterHouse::APIv1 do
+describe UrBetterHouse::API::V1 do
     include Rack::Test::Methods
 
     def app
-        UrBetterHouse::APIv1
+        UrBetterHouse::API
     end
 
     def valid_user
