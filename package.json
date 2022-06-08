@@ -1,6 +1,9 @@
 {
   "name": "UrBetterHouse",
   "private": true,
+  "engines": {
+    "node": "14.x"
+  },
   "dependencies": {
     "@babel/preset-react": "^7.17.12",
     "@emotion/react": "^11.9.0",
@@ -13,6 +16,7 @@
     "@rails/webpacker": "4.3.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "prop-types": "^15.8.1",
+    "qs": "^6.10.3",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react_ujs": "^2.6.2",
