@@ -27,9 +27,14 @@ A house marketplace PoC written in Ruby on Rails.
   * email: meme@somemail.com
   * password: isthat2022
 
+Due to token authentication system, each account has only one valid session at a time.
+If the login user has "admin" role, the UI AppBar will reveal in purple, so that can
+edit properties.
+
 ## Before deploy to Heroku
 
-If using travis ci/cd solution, don't forget to set HEROKU_API_KEY in settings.
+If using Travis-ci/cd solution, don't forget to set HEROKU_API_KEY, HEROKU_APP,
+and HEROKU_BRANCH in Travis project settings.
 
 Make sure you have nodejs buildpack added, otherwise the engine in package.json
 will take no effect.
@@ -38,3 +43,5 @@ will take no effect.
 # heroku buildpacks:add heroku/nodejs
 # heroku buildpacks:add heroku/ruby
 ```
+
+and then import data seed as "Installation" part above
