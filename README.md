@@ -26,3 +26,15 @@ A house marketplace PoC written in Ruby on Rails.
 * role: user
   * email: meme@somemail.com
   * password: isthat2022
+
+## Before deploy to Heroku
+
+If using travis ci/cd solution, don't forget to set HEROKU_API_KEY in settings.
+
+Make sure you have nodejs buildpack added, otherwise the engine in package.json
+will take no effect.
+
+```bash
+# heroku buildpacks:add heroku/nodejs
+# heroku buildpacks:add heroku/ruby
+```
