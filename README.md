@@ -44,4 +44,10 @@ will take no effect.
 # heroku buildpacks:add heroku/ruby
 ```
 
-and then import data seed as "Installation" part above
+and then import data seed as "Installation" part above:
+
+```bash
+# heroku run -a APP_NAME rails db:migrate
+# heroku run -a APP_NAME rails scraper:ur_house
+# heroku run -a APP_NAME rails ur_better_house:demo_accounts
+```
