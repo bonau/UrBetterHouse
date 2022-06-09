@@ -1,0 +1,57 @@
+<%= form_with(model: residential, local: true) do |form| %>
+  <% if residential.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(residential.errors.count, "error") %> prohibited this residential from being saved:</h2>
+
+      <ul>
+        <% residential.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :thumb_pic %>
+    <%= form.text_field :thumb_pic %>
+  </div>
+
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title %>
+  </div>
+
+  <div class="field">
+    <%= form.label :price_per_month %>
+    <%= form.number_field :price_per_month %>
+  </div>
+
+  <div class="field">
+    <%= form.label :address %>
+    <%= form.text_field :address %>
+  </div>
+
+  <div class="field">
+    <%= form.label :total_room %>
+    <%= form.number_field :total_room %>
+  </div>
+
+  <div class="field">
+    <%= form.label :livingroom %>
+    <%= form.number_field :livingroom %>
+  </div>
+
+  <div class="field">
+    <%= form.label :has_mrt %>
+    <%= form.check_box :has_mrt %>
+  </div>
+
+  <div class="field">
+    <%= form.label :mrt_line %>
+    <%= form.text_field :mrt_line %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

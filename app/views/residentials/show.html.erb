@@ -1,0 +1,42 @@
+<p>
+  <strong>Thumb pic:</strong>
+  <%= @residential.thumb_pic %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @residential.title %>
+</p>
+
+<p>
+  <strong>Price per month:</strong>
+  <%= @residential.price_per_month %>
+</p>
+
+<p>
+  <strong>Address:</strong>
+  <%= @residential.address %>
+</p>
+
+<p>
+  <strong>Total room:</strong>
+  <%= @residential.total_room %>
+</p>
+
+<p>
+  <strong>Livingroom:</strong>
+  <%= @residential.livingroom %>
+</p>
+
+<p>
+  <strong>Has mrt:</strong>
+  <%= @residential.has_mrt %>
+</p>
+
+<p>
+  <strong>Mrt line:</strong>
+  <%= @residential.mrt_line %>
+</p>
+
+<%= link_to 'Edit', edit_residential_path(@residential) %> |
+<%= link_to 'Back', residentials_path %>

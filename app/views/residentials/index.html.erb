@@ -1,0 +1,39 @@
+<h1>Residentials</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Thumb pic</th>
+      <th>Title</th>
+      <th>Price per month</th>
+      <th>Address</th>
+      <th>Total room</th>
+      <th>Livingroom</th>
+      <th>Has mrt</th>
+      <th>Mrt line</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @residentials.each do |residential| %>
+      <tr>
+        <td><%= residential.thumb_pic %></td>
+        <td><%= residential.title %></td>
+        <td><%= residential.price_per_month %></td>
+        <td><%= residential.address %></td>
+        <td><%= residential.total_room %></td>
+        <td><%= residential.livingroom %></td>
+        <td><%= residential.has_mrt %></td>
+        <td><%= residential.mrt_line %></td>
+        <td><%= link_to 'Show', residential %></td>
+        <td><%= link_to 'Edit', edit_residential_path(residential) %></td>
+        <td><%= link_to 'Destroy', residential, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Residential', new_residential_path %>
